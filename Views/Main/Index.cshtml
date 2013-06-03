@@ -1,0 +1,164 @@
+﻿@model MirrorQuickstart.Models.IndexModel
+@{
+    ViewBag.Title = ".NET Quick Start";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">Glassware Starter Project: Python Edition</a>
+
+      <div class="nav-collapse collapse">
+        <form class="navbar-form pull-right" action="/signout" method="post">
+          <button type="submit" class="btn">Sign out</button>
+        </form>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Main hero unit for a primary marketing message or call to action -->
+  <div class="hero-unit">
+    <h1>Your Recent Timeline</h1>
+    @if (!String.IsNullOrEmpty(Model.Message)) {
+    <span class="label label-warning">Message: @Model.Message</span>
+    }
+
+    <div style="margin-top: 5px;">
+
+      @foreach (Google.Apis.Mirror.v1.Data.TimelineItem timelineItem in Model.TimelineItems) {
+      @:<ul class="span3 tile">
+        @:<li><strong>ID: </strong> @timelineItem.Id </li>
+        @:<li><strong>Text: </strong> @timelineItem.Text </li>
+        @:<li><strong>HTML: </strong> @timelineItem.Html </li>
+        @:<li>
+          @:<strong>Attachments: </strong>
+          if (timelineItem.Attachments != null) {
+            foreach (Google.Apis.Mirror.v1.Data.Attachment attachment in timelineItem.Attachments) {
+              if (attachment.ContentType.StartsWith("image")) {
+              @:<img src="/attachmentproxy?attachment=@attachment.Id&timelineItem=@timelineItem.Id">
+              } else {
+              @:<a href="/attachmentproxy?attachment=@attachment.Id&timelineItem=@timelineItem.Id">Download</a>
+              }
+            }
+          }
+        @:</li>
+      @:</ul>
+      }
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="span4">
+      <h2>Timeline</h2>
+
+      <p>When you first sign in, this Glassware inserts a welcome message. Use
+        these controls to insert more items into your timeline. Learn more about
+        the timeline APIs
+        <a href="https://developers.google.com/glass/timeline">here</a></p>
+
+
+      <form action="@Url.Action("Post", "Main")" method="post">
+        <input type="hidden" name="operation" value="insertItem">
+        <textarea name="message">Hello World!</textarea><br/>
+        <button class="btn" type="submit">The above message</button>
+      </form>
+
+      <form action="@Url.Action("Post", "Main")" method="post">
+        <input type="hidden" name="operation" value="insertItem">
+        <input type="hidden" name="message"
+               value="A solar eclipse of Saturn. Earth is also in this photo. Can you find it?">
+        <input type="hidden" name="imageUrl"
+               value="@Url.Content("~/Content/images/saturn-eclipse.jpg")">
+        <input type="hidden" name="contentType" value="image/jpeg">
+
+        <button class="btn" type="submit">A picture
+          <img class="button-icon"
+               src="@Url.Content("~/Content/images/saturn-eclipse.jpg")">
+        </button>
+      </form>
+      <form action="@Url.Action("Post", "Main")" method="post">
+        <input type="hidden" name="operation" value="insertItemWithAction">
+        <button class="btn" type="submit">A card you can reply to</button>
+      </form>
+      <hr>
+      <form action="@Url.Action("Post", "Main")" method="post">
+        <input type="hidden" name="operation" value="insertItemAllUsers">
+        <button class="btn" type="submit">A card to all users</button>
+      </form>
+
+    </div>
+
+    <div class="span4">
+      <h2>Contacts</h2>
+      <p>By default, this project inserts a single contact that accepts
+      all content types. Learn more about contacts
+        <a href="https://developers.google.com/glass/contacts">here</a>.</p>
+
+      @if (Model.HasContact) {
+      @:<form class="span3" action="@Url.Action("Post", "Main")" method="post">
+        @:<input type="hidden" name="operation" value="deleteContact">
+        @:<input type="hidden" name="id" value=".NET Quick Start">
+        @:<button class="btn" type="submit">Delete .NET Quick Start Contact</button>
+      @:</form>
+      } else {
+      @:<form class="span3" action="@Url.Action("Post", "Main")" method="post">
+        @:<input type="hidden" name="operation" value="insertContact">
+        @:<input type="hidden" name="imageUrl" value="@Url.Content("~/Content/images/dotnet.png")">
+        @:<input type="hidden" name="name" value=".NET Quick Start">
+        @:<button class="btn" type="submit">Insert .NET Quick Start Contact</button>
+      @:</form>
+      }
+    </div>
+
+    <div class="span4">
+      <h2>Subscriptions</h2>
+
+      <p>By default a subscription is inserted for changes to the
+        <code>timeline</code> collection. Learn more about subscriptions
+        <a href="https://developers.google.com/glass/subscriptions">here</a></p>
+
+      <p class="label label-info">Note: Subscriptions require SSL. <br>They will not work on localhost.</p>
+
+      @if (Model.HasTimelineSubscription) {
+      <form action="@Url.Action("Post", "Main")"
+            method="post">
+        <input type="hidden" name="subscriptionId" value="timeline">
+        <input type="hidden" name="operation" value="deleteSubscription">
+        <button class="btn delete" type="submit">Unsubscribe from
+          timeline updates
+        </button>
+      </form>
+      } else {
+      <form action="@Url.Action("Post", "Main")" method="post">
+        <input type="hidden" name="operation" value="insertSubscription">
+        <input type="hidden" name="collection" value="timeline">
+        <button class="btn" type="submit">Subscribe to timeline updates</button>
+      </form>
+      }
+
+      @if (Model.HasLocationSubscription) {
+      <form action="@Url.Action("Post", "Main")"
+            method="post">
+        <input type="hidden" name="subscriptionId" value="locations">
+        <input type="hidden" name="operation" value="deleteSubscription">
+        <button class="btn delete" type="submit">Unsubscribe from
+          location updates
+        </button>
+      </form>
+      } else {
+      <form action="@Url.Action("Post", "Main")" method="post">
+        <input type="hidden" name="operation" value="insertSubscription">
+        <input type="hidden" name="collection" value="locations">
+        <button class="btn" type="submit">Subscribe to location updates</button>
+      </form>
+      }
+    </div>
+  </div>
+</div>
