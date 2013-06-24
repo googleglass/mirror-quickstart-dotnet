@@ -118,6 +118,7 @@ namespace MirrorQuickstart.Models
             /// <returns>The stored authorization state.</returns>
             static public IAuthorizationState GetState(StoredStateClient provider)
             {
+                provider.RefreshToken(provider.State);
                 return provider.State;
             }
         }
