@@ -302,7 +302,7 @@ namespace MirrorQuickstart.Controllers
             return "Contact has been deleted.";
         }
 
-	/// <summary>
+        /// <summary>
         /// Deletes a timeline item.
         /// </summary>
         /// <param name="controller">Controller calling this method.</param>
