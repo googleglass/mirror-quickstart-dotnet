@@ -44,7 +44,7 @@ namespace MirrorQuickstart.Controllers
             { "insertItemAllUsers", new Operation(InsertItemAllUsers) },
             { "insertContact", new Operation(InsertContact) },
             { "deleteContact", new Operation(DeleteContact) },
-			{ "deleteTimelineItem", new Operation(DeleteTimelineItem) }
+            { "deleteTimelineItem", new Operation(DeleteTimelineItem) }
         };
 
         #region HTTP Request Handlers
