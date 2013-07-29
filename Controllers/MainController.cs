@@ -43,7 +43,8 @@ namespace MirrorQuickstart.Controllers
             { "insertItemWithAction", new Operation(InsertItemWithAction) },
             { "insertItemAllUsers", new Operation(InsertItemAllUsers) },
             { "insertContact", new Operation(InsertContact) },
-            { "deleteContact", new Operation(DeleteContact) }
+            { "deleteContact", new Operation(DeleteContact) },
+			{ "deleteTimelineItem", new Operation(DeleteTimelineItem) }
         };
 
         #region HTTP Request Handlers
@@ -299,6 +300,17 @@ namespace MirrorQuickstart.Controllers
         {
             controller.Service.Contacts.Delete(controller.Request.Form.Get("id")).Fetch();
             return "Contact has been deleted.";
+        }
+
+		/// <summary>
+        /// Deletes a timeline item.
+        /// </summary>
+        /// <param name="controller">Controller calling this method.</param>
+        /// <returns>Status message.</returns>
+        private static String DeleteTimelineItem(MainController controller)
+        {
+			controller.Service.Timeline.Delete(controller.Request.Form.Get("itemId")).Fetch();
+            return "A timeline item has been deleted.";
         }
 
         #endregion
