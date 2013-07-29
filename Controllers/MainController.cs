@@ -302,14 +302,14 @@ namespace MirrorQuickstart.Controllers
             return "Contact has been deleted.";
         }
 
-		/// <summary>
+	/// <summary>
         /// Deletes a timeline item.
         /// </summary>
         /// <param name="controller">Controller calling this method.</param>
         /// <returns>Status message.</returns>
         private static String DeleteTimelineItem(MainController controller)
         {
-			controller.Service.Timeline.Delete(controller.Request.Form.Get("itemId")).Fetch();
+            controller.Service.Timeline.Delete(controller.Request.Form.Get("itemId")).Fetch();
             return "A timeline item has been deleted.";
         }
 
