@@ -128,7 +128,7 @@ namespace MirrorQuickstart.Controllers
                 {
                     Collection = "timeline",
                     UserToken = userId,
-                    CallbackUrl = Url.Action("notify", null, null, Request.Url.Scheme)
+                    CallbackUrl = Url.Action("notify", "notify", null, Request.Url.Scheme)
                 };
                 mirrorService.Subscriptions.Insert(subscription).Fetch();
 
